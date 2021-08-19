@@ -1,0 +1,9 @@
+{
+    "ConnectionMongoDB": "connection string into your application code",
+    "FileLog": "LogBlockchain.txt",
+    "DataBase": "DatabaseName",
+    "Collection": "CollectionName",
+    "UrlAPI": "https://www.blockchain.com/pt/api/blockchain_api",
+    "UrlAPIBlock": "https://blockchain.info/rawblock/",
+    "UrlAPITransaction": "https://blockchain.info/rawtx/"
+}
