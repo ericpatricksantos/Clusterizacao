@@ -48,3 +48,29 @@ func EscreverTexto(linhas []string, caminhoDoArquivo string) error {
 	// Caso a funcao flush retorne um erro ele sera retornado aqui tambem
 	return escritor.Flush()
 }
+
+func EscreverTextoSemApagar(linhas []string, caminhoDoArquivo string) error {
+	valoresAntigos, er := LerTexto(caminhoDoArquivo)
+
+	if er != nil {
+		return er
+	}
+	valoresAtual := append(valoresAntigos, linhas...)
+	// Cria o arquivo de texto
+	arquivo, err := os.Create(caminhoDoArquivo)
+	// Caso tenha encontrado algum erro retornar ele
+	if err != nil {
+		return err
+	}
+	// Garante que o arquivo sera fechado apos o uso
+	defer arquivo.Close()
+
+	// Cria um escritor responsavel por escrever cada linha do slice no arquivo de texto
+	escritor := bufio.NewWriter(arquivo)
+	for _, linha := range valoresAtual {
+		fmt.Fprintln(escritor, linha)
+	}
+
+	// Caso a funcao flush retorne um erro ele sera retornado aqui tambem
+	return escritor.Flush()
+}

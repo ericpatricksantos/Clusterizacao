@@ -1,9 +1,35 @@
 {
-    "ConnectionMongoDB": "connection string into your application code",
-    "FileLog": "LogBlockchain.txt",
-    "DataBase": "DatabaseName",
-    "Collection": "CollectionName",
-    "UrlAPI": "https://www.blockchain.com/pt/api/blockchain_api",
-    "UrlAPIBlock": "https://blockchain.info/rawblock/",
-    "UrlAPITransaction": "https://blockchain.info/rawtx/"
+    "ConnectionMongoDB": [
+        "connection string into your application code"
+    ],
+    "FileLog": [
+        "LogBlockchain.txt",
+        "LogIndiceEndereco.txt",
+        "LogEndereco.txt",
+        "LogEnderecosSemDados.txt"
+    ],
+    "DataBase": [
+        "blockchain"
+    ],
+    "Collection": [
+        "Adresses",
+        "blockchain",
+        "enderecos",
+        "teste"
+    ],
+    "UrlAPI": [
+        "https://blockchain.info"
+    ],
+    "RawBlock": "/rawblock/",
+    "RawTx": "/rawtx/",
+    "MultiAddr": "/multiaddr?active=",
+    "RawAddr": "/rawaddr/",
+    "BlockHeight":"/block-height/",
+    "FormatJson": "?format=json",
+    "Charts":"/charts/",
+    "Unspent":"/unspent?active=",
+    "Balance": "/balance?active=",
+    "LastBlock":"/latestblock",
+    "Unconfirmedtransactions":"/unconfirmed-transactions",
+    "Blocks":"/blocks/"
 }

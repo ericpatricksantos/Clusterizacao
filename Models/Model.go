@@ -1,5 +1,38 @@
 package Model
 
+type MultiEndereco struct {
+	Addresses []ListAddress `json:"addresses"`
+	Wallet    Carteira      `json:"wallet"`
+	Txs       []Transaction `json:"txs"`
+}
+
+type Carteira struct {
+	Final_balance  int64 `json:"final_balance"`
+	N_tx           int   `json:"n_tx"`
+	N_tx_filtered  int   `json:"n_tx_filtered"`
+	Total_received int64 `json:"total_received"`
+	Total_sent     int64 `json:"total_sent"`
+}
+
+type ListAddress struct {
+	Address        string `json:"address"`
+	Final_balance  int64  `json:"final_balance"`
+	N_tx           int    `json:"n_tx"`
+	Total_received int64  `json:"total_received"`
+	Total_sent     int64  `json:"total_sent"`
+}
+
+type UnicoEndereco struct {
+	Hash160        string        `json:"hash160"`
+	Address        string        `json:"address"`
+	N_tx           int           `json:"n_tx"`
+	N_unredeemed   int64         `json:"n_unredeemed"`
+	Total_received int64         `json:"total_received"`
+	Total_sent     int64         `json:"total_sent"`
+	Final_balance  int64         `json:"final_balance"`
+	Txs            []Transaction `json:"txs"`
+}
+
 type Block struct {
 	Hash        string        `json:"hash"`
 	Ver         int           `json:"ver"`

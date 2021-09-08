@@ -1,79 +1,38 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"time"
+	"strconv"
 
-	"main.go/Function/API"
-	"main.go/Function/Config"
-	"main.go/Function/File"
-	"main.go/Function/Repository"
+	"main.go/Controllers"
+	"main.go/Function/Arrays"
 )
 
+var ConnectionMongoDB string = Controllers.GetConfig().ConnectionMongoDB[0]
+var DataBase string = Controllers.GetConfig().DataBase[0]
+var Collection0 string = Controllers.GetConfig().Collection[3]
+var Collection2 string = Controllers.GetConfig().Collection[2]
+
+var UrlAPI string = Controllers.GetConfig().UrlAPI[0]
+
+var rota string = Controllers.GetConfig().RawAddr
+
+var Filelog string = Controllers.GetConfig().FileLog[1]
+var LogEndereco string = Controllers.GetConfig().FileLog[2]
+var FilelogSemDados string = Controllers.GetConfig().FileLog[3]
+
 func main() {
-	//SalvaDadosMongoDB()
-	TesteConfig()
-}
 
-func SalvaDadosMongoDB() {
+	input, out := Controllers.RecuperarEnderecos(ConnectionMongoDB, DataBase, Collection2)
 
-	hash, _ := File.LerTexto(Config.GetConfig().FileLog)
+	x := Arrays.RemoveDuplicados(Arrays.UnionArray(input, out))
 
-	cliente, contexto, cancel, errou := Repository.Connect(Config.GetConfig().ConnectionMongoDB)
-	if errou != nil {
-		log.Fatal(errou)
-	}
+	for index, elem := range x {
 
-	Repository.Ping(cliente, contexto)
-
-	defer Repository.Close(cliente, contexto, cancel)
-	for {
-
-		valor := API.GetBloco(hash[0])
-
-		Repository.ToDoc(valor)
-
-		insertOneResult, err := Repository.InsertOne(cliente, contexto, Config.GetConfig().DataBase, Config.GetConfig().Collection, valor)
-
-		// handle the error
-		if err != nil {
-			panic(err)
+		if len(elem) > 0 {
+			Controllers.SalvarUnicoEndereco(elem, index, UrlAPI, rota, ConnectionMongoDB, DataBase, Collection0, FilelogSemDados)
+			temp := []string{strconv.Itoa(index)}
+			Controllers.EscreverTexto(temp, Filelog)
 		}
-
-		// print the insertion id of the document,
-		// if it is inserted.
-		fmt.Println("Result of InsertOne")
-		fmt.Println(insertOneResult.InsertedID)
-
-		hash = valor.Next_Block
-
-		File.EscreverTexto(valor.Next_Block, Config.GetConfig().FileLog)
-
 	}
 
-}
-
-func TesteArquivo() {
-	for {
-		fmt.Println("Sleep Start.....")
-		// Calling Sleep method
-		time.Sleep(1 * time.Second)
-
-		// Printed after sleep is over
-		fmt.Println("Sleep Over.....")
-
-		texto, _ := File.LerTexto(Config.GetConfig().FileLog)
-
-		fmt.Println(texto[0])
-	}
-}
-
-func TesteConfig() {
-	conf := Config.GetConfig()
-
-	fmt.Println("ConnectionMongoDB: ", conf.ConnectionMongoDB)
-	fmt.Println("FileLog: ", conf.FileLog)
-	fmt.Println("DataBase: ", conf.DataBase, " Collection: ", conf.Collection)
-	fmt.Println("UrlApi: ", conf.UrlAPI, " UrlApiBlock: ", conf.UrlAPIBlock, "UrlApiTransaction: ", conf.UrlAPITransaction)
 }
