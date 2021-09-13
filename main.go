@@ -1,38 +1,32 @@
 package main
 
 import (
-	"strconv"
-
 	"main.go/Controllers"
-	"main.go/Function/Arrays"
 )
 
-var ConnectionMongoDB string = Controllers.GetConfig().ConnectionMongoDB[0]
-var DataBase string = Controllers.GetConfig().DataBase[0]
-var Collection0 string = Controllers.GetConfig().Collection[3]
-var Collection2 string = Controllers.GetConfig().Collection[2]
+var ConnectionMongoDB string = Controllers.GetConfig().ConnectionMongoDB[0] //"connection string into your application code"
+var DataBaseBlockchain string = Controllers.GetConfig().DataBase[0]         //blockchain
 
-var UrlAPI string = Controllers.GetConfig().UrlAPI[0]
+var CollectionAdresses string = Controllers.GetConfig().Collection[0] // "Adresses"
+//var CollectionBlockchain string = Controllers.GetConfig().Collection[1] // "blockchain"
+var CollectionEnderecos string = Controllers.GetConfig().Collection[2]        // "enderecos"
+var CollectionTeste string = Controllers.GetConfig().Collection[3]            // "teste"
+var CollectionTesteMultiAdress string = Controllers.GetConfig().Collection[4] // testeMultiAdress
 
-var rota string = Controllers.GetConfig().RawAddr
+var UrlAPI string = Controllers.GetConfig().UrlAPI[0] // "https://blockchain.info"
 
-var Filelog string = Controllers.GetConfig().FileLog[1]
-var LogEndereco string = Controllers.GetConfig().FileLog[2]
-var FilelogSemDados string = Controllers.GetConfig().FileLog[3]
+var rota string = Controllers.GetConfig().MultiAddr
+
+var LogBlockchain string = Controllers.GetConfig().FileLog[0]             // "LogBlockchain.txt"
+var LogIndiceEndereco string = Controllers.GetConfig().FileLog[1]         // "LogIndiceEndereco.txt"
+var LogEndereco string = Controllers.GetConfig().FileLog[2]               // "LogEndereco.txt"
+var LogEnderecosSemDados string = Controllers.GetConfig().FileLog[3]      // "LogEnderecosSemDados.txt"
+var LogIndiceMultiEndereco string = Controllers.GetConfig().FileLog[4]    // LogIndiceMultiEndereco.txt
+var LogMultiEnderecosSemDados string = Controllers.GetConfig().FileLog[5] //LogMultiEnderecosSemDados.txt
 
 func main() {
 
-	input, out := Controllers.RecuperarEnderecos(ConnectionMongoDB, DataBase, Collection2)
-
-	x := Arrays.RemoveDuplicados(Arrays.UnionArray(input, out))
-
-	for index, elem := range x {
-
-		if len(elem) > 0 {
-			Controllers.SalvarUnicoEndereco(elem, index, UrlAPI, rota, ConnectionMongoDB, DataBase, Collection0, FilelogSemDados)
-			temp := []string{strconv.Itoa(index)}
-			Controllers.EscreverTexto(temp, Filelog)
-		}
-	}
-
+	Controllers.SalvaListaMultiEnderecos(
+		ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI,
+		rota, CollectionTeste, LogMultiEnderecosSemDados, LogIndiceMultiEndereco)
 }

@@ -6,7 +6,9 @@
         "LogBlockchain.txt",
         "LogIndiceEndereco.txt",
         "LogEndereco.txt",
-        "LogEnderecosSemDados.txt"
+        "LogEnderecosSemDados.txt",
+        "LogIndiceMultiEndereco.txt",
+        "LogMultiEnderecosSemDados.txt"
     ],
     "DataBase": [
         "blockchain"
@@ -15,7 +17,8 @@
         "Adresses",
         "blockchain",
         "enderecos",
-        "teste"
+        "teste",
+        "testeMultiAdress"
     ],
     "UrlAPI": [
         "https://blockchain.info"
