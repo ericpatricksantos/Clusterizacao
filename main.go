@@ -16,7 +16,8 @@ var CollectionMapeandoEnderecos string = Controllers.GetConfig().Collection[5] /
 
 var UrlAPI string = Controllers.GetConfig().UrlAPI[0] // "https://blockchain.info"
 
-//var rota string = Controllers.GetConfig().RawAddr
+var RawAddr string = Controllers.GetConfig().RawAddr
+var MultiAddr string = Controllers.GetConfig().MultiAddr
 
 var LogBlockchain string = Controllers.GetConfig().FileLog[0]             // "LogBlockchain.txt"
 var LogIndiceEndereco string = Controllers.GetConfig().FileLog[1]         // "LogIndiceEndereco.txt"
@@ -26,11 +27,14 @@ var LogIndiceMultiEndereco string = Controllers.GetConfig().FileLog[4]    // Log
 var LogMultiEnderecosSemDados string = Controllers.GetConfig().FileLog[5] //LogMultiEnderecosSemDados.txt
 
 func main() {
-	// Controllers.SalvaListaEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, rota, CollectionAdresses, LogEnderecosSemDados,
-	// 	LogIndiceEndereco)
+	Controllers.SalvaListaEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, RawAddr, CollectionAdresses, LogEnderecosSemDados,
+		LogIndiceEndereco)
 
-	x := Controllers.MapeandoEndereco(ConnectionMongoDB, DataBaseBlockchain, CollectionTeste)
+	// x := Controllers.MapeandoEndereco(ConnectionMongoDB, DataBaseBlockchain, CollectionTeste)
 
-	Controllers.SalvarMapeamentoTransacaoMongoDB(x, ConnectionMongoDB, DataBaseBlockchain, CollectionMapeandoEnderecos)
+	// Controllers.SalvarMapeamentoTransacaoMongoDB(x, ConnectionMongoDB, DataBaseBlockchain, CollectionMapeandoEnderecos)
+
+	// Controllers.SalvaListaMultiEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, MultiAddr,
+	// 	CollectionTesteMultiAdress, LogMultiEnderecosSemDados, LogIndiceMultiEndereco, 1)
 
 }

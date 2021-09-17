@@ -1,2 +1,0 @@
-A collection Adresses terá as transações de cada endereco.
-
