@@ -13,6 +13,7 @@ var CollectionEnderecos string = Controllers.GetConfig().Collection[2]         /
 var CollectionTeste string = Controllers.GetConfig().Collection[3]             // "teste"
 var CollectionTesteMultiAdress string = Controllers.GetConfig().Collection[4]  // testeMultiAdress
 var CollectionMapeandoEnderecos string = Controllers.GetConfig().Collection[5] //MapeandoEnderecos
+var CollectionTesteMapeando string = Controllers.GetConfig().Collection[6]     // TesteMapeando
 
 var UrlAPI string = Controllers.GetConfig().UrlAPI[0] // "https://blockchain.info"
 
@@ -27,14 +28,19 @@ var LogIndiceMultiEndereco string = Controllers.GetConfig().FileLog[4]    // Log
 var LogMultiEnderecosSemDados string = Controllers.GetConfig().FileLog[5] //LogMultiEnderecosSemDados.txt
 
 func main() {
-	Controllers.SalvaListaEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, RawAddr, CollectionAdresses, LogEnderecosSemDados,
-		LogIndiceEndereco)
 
-	// x := Controllers.MapeandoEndereco(ConnectionMongoDB, DataBaseBlockchain, CollectionTeste)
+	//addresses := Controllers.RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB, DataBaseBlockchain, CollectionTeste)
+	//
+	//fmt.Println(len(addresses))
+	//fmt.Println(addresses)
 
-	// Controllers.SalvarMapeamentoTransacaoMongoDB(x, ConnectionMongoDB, DataBaseBlockchain, CollectionMapeandoEnderecos)
+	// Controllers.SalvaListaEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, RawAddr, CollectionAdresses, LogEnderecosSemDados,
+	// 	LogIndiceEndereco)
 
-	// Controllers.SalvaListaMultiEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, MultiAddr,
-	// 	CollectionTesteMultiAdress, LogMultiEnderecosSemDados, LogIndiceMultiEndereco, 1)
+	// Pega os valores da Collection
+	// retorna uma lista mapeada
+	x := Controllers.MapeandoEndereco(ConnectionMongoDB, DataBaseBlockchain, CollectionAdresses)
+	// salva no mongoDB
+	Controllers.SalvarMapeamentoTransacaoMongoDB(x, ConnectionMongoDB, DataBaseBlockchain, CollectionTesteMapeando)
 
 }

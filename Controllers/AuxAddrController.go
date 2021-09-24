@@ -1,9 +1,12 @@
 package Controllers
 
-import "main.go/Function/Arrays"
+import (
+	"main.go/Function/Arrays"
+	Model "main.go/Models"
+)
 
 func RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB string, DataBase string, CollectionRecuperaDados string) []string {
-	input, out := RecuperarEnderecos(ConnectionMongoDB, DataBase, CollectionRecuperaDados)
+	input, out := RecuperarEnderecosInputOut(ConnectionMongoDB, DataBase, CollectionRecuperaDados)
 	return UnionArrayRemoveDuplicados(input, out)
 }
 
@@ -13,6 +16,52 @@ func UnionArrayRemoveDuplicados(input []string, out []string) []string {
 
 func RemoveDuplicados(lista []string) []string {
 	return Arrays.RemoveDuplicados(lista)
+}
+
+func Inicializa(Txs []Model.Transaction) ([]Model.InputAddr, []Model.OutputAddr) {
+	var TempInput []string
+	var TempOut []string
+
+	// Atribuindo todos os inputs e output em variaveis temporarias
+	for _, elem := range Txs {
+
+		for _, input := range elem.Inputs {
+			TempInput = append(TempInput, input.Prev_out.Addr)
+		}
+
+		for _, out := range elem.Out {
+			TempOut = append(TempOut, out.Addr)
+		}
+	}
+	// Tirando os valores repetidos dessa variaveis temporarias
+	In, tamIn := Arrays.RemoveDuplicadosStringVazia(TempInput)
+	Out, tamOut := Arrays.RemoveDuplicadosStringVazia(TempOut)
+
+	if tamIn < 0 || tamOut < 0 {
+		return nil, nil
+	}
+
+	var Input []Model.InputAddr
+	var Output []Model.OutputAddr
+	// inicializando as listas de Input e Output com todos os input e output
+	// com o addr e a sua quantidade
+	for i := 0; i < tamIn; i++ {
+		var temp Model.InputAddr
+		temp.Addr = In[i]
+		temp.Qtd = 0
+
+		Input = append(Input, temp)
+	}
+
+	for j := 0; j < tamOut; j++ {
+		var temp Model.OutputAddr
+		temp.Addr = Out[j]
+		temp.Qtd = 0
+
+		Output = append(Output, temp)
+	}
+
+	return Input, Output
 }
 
 func TransformaArrayEmMatriz(listaEnderecos []string, indiceInicial int, limiteEnderecos int) ([][]string, int) {
@@ -32,7 +81,7 @@ func TransformaArrayEmMatriz(listaEnderecos []string, indiceInicial int, limiteE
 		if len(enderecosSeparados) == 0 {
 			break
 		}
-		//Alocar memoria para o array de string
+		//Alocar memoria para o array de string(Quantidade de colunas)
 		matrizEnderecos[contador] = make([]string, len(enderecosSeparados))
 		for j := 0; j < len(enderecosSeparados); j++ {
 			//Atribuir os valores do slice para a matriz

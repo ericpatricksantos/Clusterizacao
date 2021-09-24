@@ -19,7 +19,8 @@
         "enderecos",
         "teste",
         "testeMultiAdress",
-        "MapeandoEnderecos"
+        "MapeandoEnderecos",
+        "TesteMapeando"
     ],
     "UrlAPI": [
         "https://blockchain.info"
