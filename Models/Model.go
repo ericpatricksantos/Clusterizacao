@@ -1,37 +1,5 @@
 package Model
 
-type MapeandoEnderecoTransacao struct {
-	Adresses    string       `json:"addresses"`   // Endereco Analisado
-	EntradaAddr []InputAddr  `json:"EntradaAddr"` // Todos os address que aparecem no input do endereco analisado
-	SaidaAddr   []OutputAddr `json:"SaidaAddr"`   // Todos os address que aparecem no output do endereco analisado
-}
-
-type InputAddr struct {
-	Addr string `json:"Addr"`
-	Qtd  int    `json:"Qtd"` // quantidade de vezes que esse Addr aparece no array de input do endereco analisado
-}
-
-type OutputAddr struct {
-	Addr string `json:"Addr"`
-	Qtd  int    `json:"Qtd"` // quantidade de vezes que esse Addr aparece no array de out do endereco analisado
-}
-
-type MapeandoMultiEnderecoTransacao struct {
-	Adresses    string       `json:"addresses"`   // Endereco Analisado
-	EntradaHash []InputHash  `json:"EntradaHash"` // Todos os hashTransacao que o endereco analisado aparece no input
-	SaidaHash   []OutputHash `json:"SaidaHash"`   // Todos os hashTransacao que o endereco analisado aparece no output
-}
-
-type InputHash struct {
-	HashTransacao string `json:"HashTransacao"`
-	Qtd           int    `json:"Qtd"` // quantidade de vezes que esse endereco analisado aparece no array de input desse hashtransacao
-}
-
-type OutputHash struct {
-	HashTransacao string `json:"HashTransacao"`
-	Qtd           int    `json:"Qtd"` // quantidade de vezes que esse endereco analisado aparece no array de out desse hashtransacao
-}
-
 type MultiEndereco struct {
 	Addresses []ListAddress `json:"addresses"`
 	Wallet    Carteira      `json:"wallet"`

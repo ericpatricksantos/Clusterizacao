@@ -18,7 +18,7 @@ func RemoveDuplicados(lista []string) []string {
 	return Arrays.RemoveDuplicados(lista)
 }
 
-func Inicializa(Txs []Model.Transaction) ([]Model.InputAddr, []Model.OutputAddr) {
+func Inicializa(enderecoAnalisado string, Txs []Model.Transaction) ([]Model.InputAddr, []Model.OutputAddr) {
 	var TempInput []string
 	var TempOut []string
 
@@ -26,11 +26,15 @@ func Inicializa(Txs []Model.Transaction) ([]Model.InputAddr, []Model.OutputAddr)
 	for _, elem := range Txs {
 
 		for _, input := range elem.Inputs {
-			TempInput = append(TempInput, input.Prev_out.Addr)
+			if enderecoAnalisado != input.Prev_out.Addr {
+				TempInput = append(TempInput, input.Prev_out.Addr)
+			}
 		}
 
 		for _, out := range elem.Out {
-			TempOut = append(TempOut, out.Addr)
+			if enderecoAnalisado != out.Addr {
+				TempOut = append(TempOut, out.Addr)
+			}
 		}
 	}
 	// Tirando os valores repetidos dessa variaveis temporarias

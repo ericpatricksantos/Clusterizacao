@@ -1,14 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"main.go/Controllers"
 )
 
 var ConnectionMongoDB string = Controllers.GetConfig().ConnectionMongoDB[0] //"connection string into your application code"
 var DataBaseBlockchain string = Controllers.GetConfig().DataBase[0]         //blockchain
 
-var CollectionAdresses string = Controllers.GetConfig().Collection[0] // "Adresses"
-//var CollectionBlockchain string = Controllers.GetConfig().Collection[1] // "blockchain"
+var CollectionAdresses string = Controllers.GetConfig().Collection[0]          // "Adresses"
+var CollectionBlockchain string = Controllers.GetConfig().Collection[1]        // "blockchain"
 var CollectionEnderecos string = Controllers.GetConfig().Collection[2]         // "enderecos"
 var CollectionTeste string = Controllers.GetConfig().Collection[3]             // "teste"
 var CollectionTesteMultiAdress string = Controllers.GetConfig().Collection[4]  // testeMultiAdress
@@ -29,18 +30,17 @@ var LogMultiEnderecosSemDados string = Controllers.GetConfig().FileLog[5] //LogM
 
 func main() {
 
-	//addresses := Controllers.RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB, DataBaseBlockchain, CollectionTeste)
-	//
-	//fmt.Println(len(addresses))
-	//fmt.Println(addresses)
+	// Buscar um unico endereco
+	y := Controllers.GetMapAdressId(ConnectionMongoDB, DataBaseBlockchain, CollectionTesteMapeando, "_id", "6153a58d3700e70e40f8177a")
+	fmt.Println(y)
 
-	// Controllers.SalvaListaEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, RawAddr, CollectionAdresses, LogEnderecosSemDados,
-	// 	LogIndiceEndereco)
+	//Controllers.SalvaListaEnderecos(ConnectionMongoDB, DataBaseBlockchain, CollectionEnderecos, UrlAPI, RawAddr, CollectionAdresses, LogEnderecosSemDados,
+	//	LogIndiceEndereco)
 
 	// Pega os valores da Collection
 	// retorna uma lista mapeada
-	x := Controllers.MapeandoEndereco(ConnectionMongoDB, DataBaseBlockchain, CollectionAdresses)
-	// salva no mongoDB
-	Controllers.SalvarMapeamentoTransacaoMongoDB(x, ConnectionMongoDB, DataBaseBlockchain, CollectionTesteMapeando)
+	//x := Controllers.MapeandoEndereco(ConnectionMongoDB, DataBaseBlockchain, CollectionTeste)
+	//// salva no mongoDB
+	//Controllers.SalvarMapeamentoTransacaoMongoDB(x, ConnectionMongoDB, DataBaseBlockchain, CollectionTesteMapeando)
 
 }

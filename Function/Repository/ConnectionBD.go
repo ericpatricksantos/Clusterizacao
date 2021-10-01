@@ -3,6 +3,9 @@ package Repository
 import (
 	"context"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
+	Model "main.go/Models"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -108,6 +111,39 @@ func Query(client *mongo.Client, ctx context.Context, dataBase, col string, quer
 	// based on query and field.
 	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
 	return result, err
+}
+
+/*
+Busca um único documento atráves de uma chave e um valor
+	Exemplo:
+			Key = _id , Code = "6153a58d3700e70e40f8177a"
+			Key = adresses , Code = "13adwKvLLpHdcYDh21FguCdJgKhaYP3Dse"
+*/
+func QueryOne(client *mongo.Client, ctx context.Context, dataBase, col string, key string, code string) (mapAddr Model.ReturnAddrMapTx, err error) {
+
+	// select database and collection.
+	collection := client.Database(dataBase).Collection(col)
+
+	var filter bson.M
+
+	if key == "_id" {
+		objectId, _ := primitive.ObjectIDFromHex(code)
+		filter = bson.M{
+			key: objectId,
+		}
+		if err = collection.FindOne(ctx, filter).Decode(&mapAddr); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		filter = bson.M{
+			key: code,
+		}
+		if err = collection.FindOne(ctx, filter).Decode(&mapAddr); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return mapAddr, err
 }
 
 // UpdateOne is a user defined method, that update

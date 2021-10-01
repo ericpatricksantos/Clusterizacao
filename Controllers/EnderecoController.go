@@ -103,13 +103,13 @@ func MapeandoEndereco(ConnectionMongoDB string, DataBase string, Collection stri
 		// Definindo variáveis temporárias para atribuir os valores do endereco analisado e seus addr
 		var temp Model.MapeandoEnderecoTransacao
 		// Inicializa os dois array com seus addr e seus qtd = 0
-		tempInput, tempOutput := Inicializa(enderecos.Txs)
+		tempInput, tempOutput := Inicializa(enderecos.Address, enderecos.Txs)
 
 		// Definindo o endereco analisado
 		temp.Adresses = enderecos.Address
 		for {
 
-			if contadorInput == len(tempInput)-1 {
+			if contadorInput == len(tempInput) {
 				contadorInput = 0
 				break
 			} else {
@@ -130,7 +130,7 @@ func MapeandoEndereco(ConnectionMongoDB string, DataBase string, Collection stri
 
 		}
 		for {
-			if contadorOut == len(tempOutput)-1 {
+			if contadorOut == len(tempOutput) {
 				contadorOut = 0
 				break
 			} else {
