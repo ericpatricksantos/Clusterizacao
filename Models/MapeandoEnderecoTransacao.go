@@ -9,13 +9,13 @@ import (
 */
 type ReturnAddrMapTx struct {
 	Id          primitive.ObjectID `json:"id" bson:"_id"`
-	Adresses    string             `json:"addresses" `  // Endereco Analisado
+	Addresses   string             `json:"addresses" `  // Endereco Analisado
 	EntradaAddr []InputAddr        `json:"EntradaAddr"` // Todos os address que aparecem no input do endereco analisado
 	SaidaAddr   []OutputAddr       `json:"SaidaAddr"`   // Todos os address que aparecem no output do endereco analisado
 }
 
 type MapeandoEnderecoTransacao struct {
-	Adresses    string       `json:"addresses"`   // Endereco Analisado
+	Addresses   string       `json:"addresses"`   // Endereco Analisado
 	EntradaAddr []InputAddr  `json:"EntradaAddr"` // Todos os address que aparecem no input do endereco analisado
 	SaidaAddr   []OutputAddr `json:"SaidaAddr"`   // Todos os address que aparecem no output do endereco analisado
 }

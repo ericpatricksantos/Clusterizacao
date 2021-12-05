@@ -3,6 +3,8 @@ package Controllers
 import (
 	"log"
 
+	"main.go/Function/Auxiliares"
+
 	"gopkg.in/mgo.v2/bson"
 	"main.go/Function/Repository"
 	Model "main.go/Models"
@@ -15,22 +17,7 @@ Busca um único documento atráves de uma chave e um valor
 			Key = adresses , Code = "13adwKvLLpHdcYDh21FguCdJgKhaYP3Dse"
 */
 func GetMapAdressId(ConnectionMongoDB string, DataBase string, CollectionRecuperaDados string, Key string, Code string) Model.ReturnAddrMapTx {
-	// Get Client, Context, CalcelFunc and err from connect method.
-	client, ctx, cancel, err := Repository.Connect(ConnectionMongoDB)
-	if err != nil {
-		panic(err)
-	}
-
-	// Free the resource when mainn dunction is  returned
-	defer Repository.Close(client, ctx, cancel)
-
-	result, err := Repository.QueryOne(client, ctx, DataBase,
-		CollectionRecuperaDados, Key, Code)
-	// handle the errors.
-	if err != nil {
-		panic(err)
-	}
-	return result
+	return Auxiliares.GetMapAdressId(ConnectionMongoDB, DataBase, CollectionRecuperaDados, Key, Code)
 }
 
 func GetAllMapAddress(ConnectionMongoDB string, DataBase string, CollectionRecuperaDados string) []Model.ReturnAddrMapTx {

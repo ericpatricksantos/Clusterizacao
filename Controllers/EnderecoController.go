@@ -5,11 +5,45 @@ import (
 	"log"
 	"strconv"
 
+	"main.go/Function/Auxiliares"
+
 	"gopkg.in/mgo.v2/bson"
 	"main.go/Function/API"
 	"main.go/Function/Repository"
 	Model "main.go/Models"
 )
+
+/*
+	Recupera Multi Endereços
+	Converter esses Multi Endereços em Endereços Unicos
+	Salva os Enderecos Unicos no MongoDbs
+*/
+func RecuperaMultiAddrESalvaEmEnderecos(ConnectionMongoDB string, DataBase string, CollectionRecuperaDados string,
+	UrlAPI string, MultiAddr string, CollectionSalvaDados string,
+	nomeArquivoSemApagar string, nomeArquivoIndice string) {
+
+	listaEnderecos := Auxiliares.RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB, DataBase, CollectionRecuperaDados)
+
+	indiceInicial := GetIndiceLogIndice(nomeArquivoIndice) + 1
+
+	for contador := indiceInicial; contador < len(listaEnderecos); contador++ {
+		if len(listaEnderecos[contador]) > 0 {
+			fmt.Printf("\n")
+			fmt.Printf("-------------------------------------------------------------------------------")
+
+			fmt.Printf("\nSalvando %dº endereço %s \n", contador, listaEnderecos[contador])
+			addr := []string{listaEnderecos[contador]}
+			multiAddr := Auxiliares.GetMultiEndereco(addr, UrlAPI, MultiAddr)
+			address := Auxiliares.ConverteMultiAddrEMAddr(multiAddr)
+			salvou := Auxiliares.SalvaEnderecoMongoDb(address, contador, ConnectionMongoDB, DataBase, CollectionSalvaDados,
+				nomeArquivoSemApagar, nomeArquivoIndice)
+
+			if !salvou {
+				break
+			}
+		}
+	}
+}
 
 /*
 	Apos chamar a funçao MapeandoEndereco que retorna []Model.MapeandoEnderecoTransacao
@@ -103,10 +137,10 @@ func MapeandoEndereco(ConnectionMongoDB string, DataBase string, Collection stri
 		// Definindo variáveis temporárias para atribuir os valores do endereco analisado e seus addr
 		var temp Model.MapeandoEnderecoTransacao
 		// Inicializa os dois array com seus addr e seus qtd = 0
-		tempInput, tempOutput := Inicializa(enderecos.Address, enderecos.Txs)
+		tempInput, tempOutput := Auxiliares.Inicializa(enderecos.Address, enderecos.Txs)
 
 		// Definindo o endereco analisado
-		temp.Adresses = enderecos.Address
+		temp.Addresses = enderecos.Address
 		for {
 
 			if contadorInput == len(tempInput) {
@@ -220,7 +254,7 @@ func SalvaListaEnderecos(ConnectionMongoDB string, DataBase string, CollectionRe
 	UrlAPI string, RawAddr string, CollectionSalvaDados string,
 	nomeArquivoSemApagar string, nomeArquivoIndice string) {
 
-	listaEnderecos := RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB, DataBase, CollectionRecuperaDados)
+	listaEnderecos := Auxiliares.RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB, DataBase, CollectionRecuperaDados)
 
 	indiceInicial := GetIndiceLogIndice(nomeArquivoIndice) + 1
 
@@ -246,65 +280,10 @@ Recuperar Todos os enderecos que esta armazenado no mongoDB
 Retorno todas os input e out de todos os documentos
 */
 func RecuperarEnderecosInputOut(ConnectionMongoDB string, DataBase string, Collection string) ([]string, []string) {
-	var listaout []string
-	var listainput []string
-
-	// Get Client, Context, CalcelFunc and err from connect method.
-	client, ctx, cancel, err := Repository.Connect(ConnectionMongoDB)
-	if err != nil {
-		panic(err)
-	}
-
-	// Free the resource when mainn dunction is  returned
-	defer Repository.Close(client, ctx, cancel)
-
-	// create a filter an option of type interface,
-	// that stores bjson objects.
-	var filter, option interface{}
-
-	// filter  gets all document,
-	// with maths field greater that 70
-	filter = bson.M{}
-
-	//  option remove id field from all documents
-	option = bson.M{}
-
-	// call the query method with client, context,
-	// database name, collection  name, filter and option
-	// This method returns momngo.cursor and error if any.
-	cursor, err := Repository.Query(client, ctx, DataBase,
-		Collection, filter, option)
-	// handle the errors.
-	if err != nil {
-		panic(err)
-	}
-
-	// le os documentos em partes, testei com 1000 documentos e deu bom
-	defer cursor.Close(ctx)
-
-	for cursor.Next(ctx) {
-		var enderecos Model.UnicoEndereco
-
-		if err := cursor.Decode(&enderecos); err != nil {
-			log.Fatal(err)
-		}
-
-		for _, doc := range enderecos.Txs {
-			for _, x := range doc.Inputs {
-
-				listainput = append(listainput, x.Prev_out.Addr)
-			}
-			for _, h := range doc.Out {
-				listaout = append(listaout, h.Addr)
-			}
-		}
-
-	}
-
-	return listainput, listaout
+	return Auxiliares.RecuperarEnderecosInputOut(ConnectionMongoDB, DataBase, Collection)
 }
 
-/*Salvar Unicoendereco pegando o endereco da API*/
+/*Salva UnicoEndereco buscando o endereco da API*/
 func SalvarUnicoEndereco(endereco string, indice int, UrlAPI string, RawAddr string,
 	ConnectionMongoDB string, DataBase string, Collection string,
 	nomeArquivoSemApagar string, nomeArquivoIndice string) bool {

@@ -3,10 +3,11 @@ package Repository
 import (
 	"context"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
-	Model "main.go/Models"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	Model "main.go/Models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -117,7 +118,7 @@ func Query(client *mongo.Client, ctx context.Context, dataBase, col string, quer
 Busca um único documento atráves de uma chave e um valor
 	Exemplo:
 			Key = _id , Code = "6153a58d3700e70e40f8177a"
-			Key = adresses , Code = "13adwKvLLpHdcYDh21FguCdJgKhaYP3Dse"
+			Key = addresses , Code = "13adwKvLLpHdcYDh21FguCdJgKhaYP3Dse"
 */
 func QueryOne(client *mongo.Client, ctx context.Context, dataBase, col string, key string, code string) (mapAddr Model.ReturnAddrMapTx, err error) {
 
@@ -144,6 +145,117 @@ func QueryOne(client *mongo.Client, ctx context.Context, dataBase, col string, k
 	}
 
 	return mapAddr, err
+}
+
+/*
+	Retorna um Unico Elemento do Graph
+*/
+func SearchOne(client *mongo.Client, ctx context.Context, dataBase, col string, visitado bool) (graph Model.Graph, err error) {
+
+	// select database and collection.
+	collection := client.Database(dataBase).Collection(col)
+
+	filter := bson.M{"nodos.visitado": visitado}
+
+	if err = collection.FindOne(ctx, filter).Decode(&graph); err != nil {
+		log.Fatal(err)
+	}
+
+	return graph, err
+}
+
+/*
+Busca a ocorrencia de um elemente atráves de uma chave e um valor
+	Exemplo:
+			Key = _id , Code = "6153a58d3700e70e40f8177a"
+			Key = adresses , Code = "13adwKvLLpHdcYDh21FguCdJgKhaYP3Dse"
+	return
+		 0 ocorrencia do docuemnto
+		 1 ocorrencia do documento
+		 2 ocorrencias do documento
+*/
+func CountElemento(client *mongo.Client, ctx context.Context, dataBase, col string, key string, code string) (Count int64, err error) {
+
+	// select database and collection.
+	collection := client.Database(dataBase).Collection(col)
+
+	var filter bson.M
+
+	if key == "_id" {
+		objectId, _ := primitive.ObjectIDFromHex(code)
+		filter = bson.M{
+			key: objectId,
+		}
+		opts := options.Count().SetMaxTime(2 * time.Second)
+		Count, err = collection.CountDocuments(
+			context.TODO(),
+			filter,
+			opts)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+	} else {
+		filter = bson.M{
+			key: code,
+		}
+
+		opts := options.Count().SetMaxTime(2 * time.Second)
+		Count, err = collection.CountDocuments(
+			context.TODO(),
+			filter,
+			opts)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return Count, err
+}
+
+/*
+Busca um único graph atráves de uma chave e um valor
+	Exemplo:
+			Key = _id , Code = "6153a58d3700e70e40f8177a"
+			Key = addresses , Code = "13adwKvLLpHdcYDh21FguCdJgKhaYP3Dse"
+*/
+func QueryOneGraph(client *mongo.Client, ctx context.Context, dataBase, col string, key string, code string) (graph Model.Graph, err error) {
+
+	// select database and collection.
+	collection := client.Database(dataBase).Collection(col)
+
+	var filter bson.M
+
+	if key == "_id" {
+		objectId, _ := primitive.ObjectIDFromHex(code)
+		filter = bson.M{
+			key: objectId,
+		}
+		if err = collection.FindOne(ctx, filter).Decode(&graph); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		filter = bson.M{
+			key: code,
+		}
+		if err = collection.FindOne(ctx, filter).Decode(&graph); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return graph, err
+}
+
+func AdicionaAddress(client *mongo.Client, ctx context.Context, dataBase, col string, filter, update interface{}, opts *options.UpdateOptions) (result *mongo.UpdateResult, err error) {
+
+	// select the databse and the collection
+	collection := client.Database(dataBase).Collection(col)
+
+	// A single document that match with the
+	// filter will get updated.
+	// update contains the filed which should get updated.
+	result, err = collection.UpdateOne(ctx, filter, update, opts)
+	return
 }
 
 // UpdateOne is a user defined method, that update

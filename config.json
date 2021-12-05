@@ -1,6 +1,6 @@
 {
     "ConnectionMongoDB": [
-        "connection string into your application code"
+        "mongodb+srv://ericpatrick:9858epJusd@cluster0.cieqi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
     ],
     "FileLog": [
         "LogBlockchain.txt",
@@ -8,7 +8,8 @@
         "LogEndereco.txt",
         "LogEnderecosSemDados.txt",
         "LogIndiceMultiEndereco.txt",
-        "LogMultiEnderecosSemDados.txt"
+        "LogMultiEnderecosSemDados.txt",
+        "Etiqueta.txt"
     ],
     "DataBase": [
         "blockchain"
@@ -20,7 +21,10 @@
         "teste",
         "testeMultiAdress",
         "MapeandoEnderecos",
-        "TesteMapeando"
+        "TesteMapeando",
+        "Graph",
+        "TesteGraph",
+        "EnderecosAgrupados"
     ],
     "UrlAPI": [
         "https://blockchain.info"

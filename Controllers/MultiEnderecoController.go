@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"main.go/Function/Auxiliares"
+
 	"gopkg.in/mgo.v2/bson"
 	"main.go/Function/API"
 	"main.go/Function/Repository"
@@ -80,11 +82,11 @@ func SalvaListaMultiEnderecos(ConnectionMongoDB string, DataBase string, Collect
 	UrlAPI string, MultiAddr string, CollectionSalvaDados string,
 	nomeArquivoSemApagar string, nomeArquivoIndice string, limiteEnderecos int) {
 
-	listaEnderecos := RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB, DataBase, CollectionRecuperaDados)
+	listaEnderecos := Auxiliares.RecuperaEnderecosUnionArrayRemoveDuplicados(ConnectionMongoDB, DataBase, CollectionRecuperaDados)
 
 	/* incrementa 1 no indice para remover o ultimo elemento salvo*/
 	indiceInicial := GetIndiceLogIndice(nomeArquivoIndice) + 1
-	listaMultiEnderecos, qtd := TransformaArrayEmMatriz(listaEnderecos, indiceInicial, limiteEnderecos)
+	listaMultiEnderecos, qtd := Auxiliares.TransformaArrayEmMatriz(listaEnderecos, indiceInicial, limiteEnderecos)
 	indiceAtual := 0
 	for contador := 0; contador < qtd; contador++ {
 		if len(listaMultiEnderecos[contador]) > 0 {
