@@ -1,6 +1,6 @@
 {
     "ConnectionMongoDB": [
-        "mongodb+srv://ericpatrick:9858epJusd@cluster0.cieqi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+        "string conexão"
     ],
     "FileLog": [
         "LogBlockchain.txt",
